@@ -32,6 +32,9 @@ ifeq ($(TARGET), ios)
              -framework Foundation \
              $(INCLUDE_FLAGS)
 else ifeq ($(TARGET), android)
+    CC = /opt/android-ndk-r26c/toolchains/llvm/prebuilt/linux-x86_64/bin/clang
+    CFLAGS = -target aarch64-linux-android \
+             -DANDROID
 else 
 endif
 
