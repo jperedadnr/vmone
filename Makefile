@@ -11,10 +11,11 @@ ifeq ($(shell uname), Linux)
     CC = gcc
     CFLAGS = -D_GNU_SOURCE $(INCLUDE_FLAGS)
 else ifeq ($(shell uname), Darwin)
+    TARGET=macosx
     INCLUDE_FLAGS=-I$(JAVA)/include -I$(JAVA)/include/darwin
     OS := macosx
     CC = gcc
-    CFLAGS = $(INCLUDE_FLAGS)
+    CFLAGS = -DDARWIN $(INCLUDE_FLAGS) 
 else
     OS := Unknown
 endif
@@ -45,6 +46,11 @@ OBJDIR = build
 LIBDIR = lib
 
 SRCS = $(wildcard $(SRCDIR)/*.c)
+ifeq ($(TARGET), macosx)
+    SRCS = $(wildcard $(SRCDIR)/*.c) $(wildcard $(DARWIN_SRCDIR)/*.m)
+#    SRCS += $(wildcard $(SRCDIR)/darwin/*.m)
+    echo "SRCS = $(SRCS)"
+endif
 ifeq ($(TARGET), ios)
     SRCS = $(wildcard $(SRCDIR)/*.c) $(wildcard $(DARWIN_SRCDIR)/*.m)
 #    SRCS += $(wildcard $(SRCDIR)/darwin/*.m)
