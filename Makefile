@@ -72,12 +72,16 @@ LIB = $(LIBDIR)/$(OS)/libvmone.a
 all: $(LIB)
 
 $(LIB): $(OBJS)
-	@echo "OBJS = $(OBJS)"
 	@mkdir -p $(LIBDIR)/$(OS)
-	@mkdir -p $(TEMP_DIR)
-	@cd $(TEMP_DIR) && ar x $(abspath $(JDKLIB))
-	ar rcs $@ $^ $(TEMP_DIR)/*.o
-	@rm -rf $(TEMP_DIR)
+	if [ -s $(JDKLIB) ]; then \
+		echo "Including $(JDKLIB) in lib"; \
+		ar x $(JDKLIB); \
+		ar rcs $@ $^ *.o; \
+		rm -f *.o; \
+	else \
+		echo "Existing library not found. Creating static library with object files only."; \
+		ar rcs $@ $^; \
+	fi
 
 debug:
 	@echo "OS: $(OS)"
