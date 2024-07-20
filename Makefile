@@ -64,6 +64,8 @@ OBJS_C = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/$(OS)/%.o,$(filter %.c,$(SRCS)))
 OBJS_M = $(patsubst $(DARWIN_SRCDIR)/%.m,$(OBJDIR)/$(OS)/%.o,$(filter %.m,$(SRCS)))
 OBJS = $(OBJS_C) $(OBJS_M)
 
+JDKLIB = /tmp/libjdk.a
+TEMP_DIR = /tmp/extractdir
 
 LIB = $(LIBDIR)/$(OS)/libvmone.a
 
@@ -72,7 +74,10 @@ all: $(LIB)
 $(LIB): $(OBJS)
 	@echo "OBJS = $(OBJS)"
 	@mkdir -p $(LIBDIR)/$(OS)
-	ar rcs $@ $^
+	@mkdir -p $(TEMP_DIR)
+	@cd $(TEMP_DIR) && ar x $(abspath $(JDKLIB))
+	ar rcs $@ $^ $(TEMP_DIR)/*.o
+	@rm -rf $(TEMP_DIR)
 
 debug:
 	@echo "OS: $(OS)"
