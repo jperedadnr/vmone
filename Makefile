@@ -75,9 +75,10 @@ $(LIB): $(OBJS)
 	@mkdir -p $(LIBDIR)/$(OS)
 	if [ -s $(JDKLIB) ]; then \
 		echo "Including $(JDKLIB) in lib"; \
-		ar x $(JDKLIB); \
-		ar rcs $@ $^ *.o; \
-		rm -f *.o; \
+		TMPDIR=$(LIBDIR)/$(OS)/temp_objs; \
+		mkdir -p $$TMPDIR; \
+		(cd $$TMPDIR && ar x $(JDKLIB)); \
+		ar rcs $@ $$TMPDIR/*.o $^; \
 	else \
 		echo "Existing library not found. Creating static library with object files only."; \
 		ar rcs $@ $^; \

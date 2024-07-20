@@ -20,3 +20,6 @@ void* mymmap(void *addr, size_t length, int prot, int flags, int fd, off_t offse
 void* myprint(void *addr) {
     fprintf(stderr, "PRINT: %p\n", addr);
 }
+void* myprinti(int val) {
+    fprintf(stderr, "PRINT intval: %d\n", val);
+}
