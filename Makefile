@@ -67,12 +67,12 @@ OBJS = $(OBJS_C) $(OBJS_M)
 JDKLIB = /tmp/libjdk.a
 TEMP_DIR = /tmp/extractdir
 
-LIB = $(LIBDIR)/$(OS)/libvmone.a
+LIB = $(LIBDIR)/$(OS)/staticjdk/lib/static/libvmone.a
 
 all: $(LIB)
 
 $(LIB): $(OBJS)
-	@mkdir -p $(LIBDIR)/$(OS)
+	@mkdir -p $(LIBDIR)/$(OS)/staticjdk/lib/static
 	if [ -s $(JDKLIB) ]; then \
 		echo "Including $(JDKLIB) in lib"; \
 		TMPDIR=$(LIBDIR)/$(OS)/temp_objs; \
