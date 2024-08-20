@@ -33,6 +33,7 @@ ifeq ($(TARGET), ios)
              -framework Foundation \
              $(INCLUDE_FLAGS)
 else ifeq ($(TARGET), android)
+    OS := android
     CC = /opt/android-ndk-r26c/toolchains/llvm/prebuilt/linux-x86_64/bin/clang
     CFLAGS = -target aarch64-linux-android \
              -DANDROID
@@ -67,12 +68,12 @@ OBJS = $(OBJS_C) $(OBJS_M)
 JDKLIB = /tmp/libjdk.a
 TEMP_DIR = /tmp/extractdir
 
-LIB = $(LIBDIR)/$(OS)/staticjdk/lib/static/libvmone.a
+LIB = $(LIBDIR)/$(OS)/staticjdk/lib/libvmone.a
 
 all: $(LIB)
 
 $(LIB): $(OBJS)
-	@mkdir -p $(LIBDIR)/$(OS)/staticjdk/lib/static
+	@mkdir -p $(LIBDIR)/$(OS)/staticjdk/lib
 	if [ -s $(JDKLIB) ]; then \
 		echo "Including $(JDKLIB) in lib"; \
 		TMPDIR=$(LIBDIR)/$(OS)/temp_objs; \

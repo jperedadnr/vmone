@@ -382,6 +382,7 @@ int jio_vsnprintf(char *str, size_t count, const char *fmt, va_list args) {
   return result;
 }
 
+#if 0
 #ifdef JNI_VERSION_9
 /*
  * Both `jio_snprintf` and `jio_fprintf` as defined in `src/java.base/share/native/libjava/jio.c`
@@ -409,4 +410,5 @@ JNIEXPORT int jio_fprintf(FILE *fp, const char *fmt, ...) {
 
     return len;
 }
+#endif
 #endif
