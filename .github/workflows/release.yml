@@ -1,0 +1,81 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build-android:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: 'Checkout the JDK source'
+        uses: actions/checkout@v4
+      - name: 'Download libjdk.a'
+        uses: robinraju/release-downloader@v1
+        with:
+          repository: 'gluonhq/mobile'
+          latest: true
+          fileName: 'android-linux-aarch64.zip'
+      - name: 'Build'
+        run: |
+          unzip android-linux-aarch64.zip -d /tmp/
+          mv /tmp/android-linux-aarch64/libjdk.a /tmp/
+          make TARGET=android clean all
+      - name: 'Upload static image artifact'
+        uses: actions/upload-artifact@v4
+        with:
+          name: vmone-android-linux-aarch64
+          path: lib/android/staticjdk/lib/
+          retention-days: 1
+  build-ios:
+    runs-on: macos-14
+    steps:
+      - name: 'Checkout the JDK source'
+        uses: actions/checkout@v4
+      - name: 'Download libjdk.a'
+        uses: robinraju/release-downloader@v1
+        with:
+          repository: 'gluonhq/mobile'
+          latest: true
+          fileName: 'ios-macos-aarch64.zip'
+      - name: 'Build'
+        run: |
+          unzip ios-macos-aarch64.zip -d /tmp/
+          mv /tmp/ios-macos-aarch64/libjdk.a /tmp/
+          make TARGET=ios clean all
+      - name: 'Upload static image artifact'
+        uses: actions/upload-artifact@v4
+        with:
+          name: vmone-ios-macos-aarch64
+          path: lib/ios/staticjdk/lib/
+          retention-days: 1
+  release:
+    needs: [ build-android, build-ios ]
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Download android artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: vmone-android-linux-aarch64
+          path: ./dist/android-linux-aarch64/lib/
+      - name: Download ios artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: vmone-ios-macos-aarch64
+          path: ./dist/ios-macos-aarch64/lib/
+      - name: Zip downloaded artifact
+        run: |
+          cd $GITHUB_WORKSPACE/dist/android-linux-aarch64/
+          zip -r ../vmone-android-linux-aarch64.zip lib/
+          cd $GITHUB_WORKSPACE/dist/ios-macos-aarch64/
+          zip -r ../vmone-ios-macos-aarch64.zip lib/
+      - name: Check downloads
+        run: |
+          pwd
+          ls -R ./dist/
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ./dist/*.zip
