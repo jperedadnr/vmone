@@ -382,6 +382,10 @@ int jio_vsnprintf(char *str, size_t count, const char *fmt, va_list args) {
   return result;
 }
 
+JNIEXPORT jboolean JVM_IsContainerized(void *env, void * ignored) {
+    return JNI_FALSE;
+}
+
 #if 0
 #ifdef JNI_VERSION_9
 /*
