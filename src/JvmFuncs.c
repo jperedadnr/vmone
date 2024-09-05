@@ -47,7 +47,7 @@
 #define OS_ERR -1
 
 /* Set by native-image during image build time. Indicates whether the built image is a static binary. */
-//extern int __svm_vm_is_static_binary;
+ int __svm_vm_is_static_binary = 0;
 /*
     The way JDK checks IPv6 support on Linux involves checking if inet_pton exists using JVM_FindLibraryEntry. That
     function in turn calls dlsym, which is a bad idea in a static binary.
