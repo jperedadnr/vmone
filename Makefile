@@ -9,7 +9,7 @@ ifeq ($(shell uname), Linux)
     INCLUDE_FLAGS=-I$(JAVA)/include -I$(JAVA)/include/linux
     OS := linux
     CC = gcc
-    CFLAGS = -D_GNU_SOURCE $(INCLUDE_FLAGS)
+    CFLAGS = -D_GNU_SOURCE -fPIC $(INCLUDE_FLAGS)
 else ifeq ($(shell uname), Darwin)
     TARGET=macosx
     INCLUDE_FLAGS=-I$(JAVA)/include -I$(JAVA)/include/darwin
